@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <ultradev translate="label" module="ultradev_checkout">
+            <label>UltraDev</label>
+            <sort_order>400</sort_order>
+        </ultradev>
+    </tabs>
+    <sections>
+        <ultradev_checkout translate="label" module="ultradev_checkout">
+            <label>Ultra Checkout</label>
+            <tab>ultradev</tab>
+            <sort_order>10</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>Configurações Gerais</label>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled translate="label">
+                            <label>Ativar Ultra Checkout</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled>
+                        <pix_discount translate="label comment">
+                            <label>Desconto Pix (%)</label>
+                            <comment>Percentual de desconto para pagamento via Pix</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </pix_discount>
+                        <max_installments translate="label">
+                            <label>Máximo de Parcelas</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_installments>
+                        <free_installments translate="label comment">
+                            <label>Parcelas Sem Juros</label>
+                            <comment>Número de parcelas sem acréscimo de juros</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </free_installments>
+                    </fields>
+                </general>
+            </groups>
+        </ultradev_checkout>
+    </sections>
+</config>
