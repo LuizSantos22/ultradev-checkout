@@ -81,36 +81,4 @@ class UltraDev_Checkout_IndexController extends Mage_Core_Controller_Front_Actio
 
         $this->getResponse()->setBody(json_encode($result));
     }
-
-    /**
-     * Endpoint AJAX para calcular parcelas
-     */
-    public function installmentsAction()
-    {
-        $this->getResponse()->setHeader('Content-type', 'application/json');
-
-        $total        = (float) $this->getRequest()->getPost('total');
-        $interestRate = (float) $this->getRequest()->getPost('interest_rate', 1.99);
-
-        if ($total <= 0) {
-            $this->getResponse()->setBody(json_encode(['success' => false, 'message' => 'Total inválido.']));
-            return;
-        }
-
-        $helper       = Mage::helper('ultradev_checkout');
-        $installments = $helper->calculateInstallments($total, $interestRate);
-
-        $formatted = [];
-        foreach ($installments as $i) {
-            $label = $i['qty'] . 'x de ' . $helper->formatCurrency($i['value']);
-            if (!$i['interest']) {
-                $label .= ' sem juros';
-            } else {
-                $label .= ' (total ' . $helper->formatCurrency($i['total']) . ')';
-            }
-            $formatted[] = ['qty' => $i['qty'], 'label' => $label, 'value' => $i['value']];
-        }
-
-        $this->getResponse()->setBody(json_encode(['success' => true, 'installments' => $formatted]));
-    }
 }
