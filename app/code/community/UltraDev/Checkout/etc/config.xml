@@ -67,9 +67,6 @@
         <ultradev_checkout>
             <general>
                 <enabled>1</enabled>
-                <pix_discount>5</pix_discount>
-                <max_installments>12</max_installments>
-                <free_installments>3</free_installments>
             </general>
         </ultradev_checkout>
     </default>
