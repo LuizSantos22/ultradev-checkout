@@ -1,0 +1,6 @@
+app/code/community/UltraDev/Checkout    app/code/community/UltraDev/Checkout
+app/etc/modules/UltraDev_Checkout.xml   app/etc/modules/UltraDev_Checkout.xml
+app/design/frontend/base/default/layout/ultradev_checkout.xml   app/design/frontend/base/default/layout/ultradev_checkout.xml
+app/design/frontend/base/default/template/ultradev    app/design/frontend/base/default/template/ultradev
+skin/frontend/base/default/css/ultradev    skin/frontend/base/default/css/ultradev
+skin/frontend/base/default/js/ultradev     skin/frontend/base/default/js/ultradev
