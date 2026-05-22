@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <UltraDev_Checkout>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Checkout />
+                <Mage_Customer />
+                <Mage_Sales />
+            </depends>
+        </UltraDev_Checkout>
+    </modules>
+</config>
