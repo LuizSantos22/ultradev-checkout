@@ -1,0 +1,30 @@
+{
+    "name": "ultradev/magento-checkout",
+    "description": "One Step Checkout moderno para OpenMage / Magento 1.x com suporte a PF/PJ, Pix, Cartão e Boleto",
+    "type": "magento-module",
+    "version": "1.0.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "UltraDev",
+            "email": "contato@ultradev.com.br",
+            "homepage": "https://ultradev.com.br"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "magento-hackathon/magento-composer-installer": "*"
+    },
+    "extra": {
+        "magento-root-dir": "../../",
+        "magento-deploystrategy": "copy",
+        "auto-append-gitignore": true
+    },
+    "keywords": [
+        "magento",
+        "openmage",
+        "checkout",
+        "one-step-checkout",
+        "ultradev"
+    ]
+}
