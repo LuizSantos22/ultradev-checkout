@@ -31,32 +31,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </enabled>
-                        <pix_discount translate="label comment">
-                            <label>Desconto Pix (%)</label>
-                            <comment>Percentual de desconto para pagamento via Pix</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>2</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </pix_discount>
-                        <max_installments translate="label">
-                            <label>Máximo de Parcelas</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>3</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </max_installments>
-                        <free_installments translate="label comment">
-                            <label>Parcelas Sem Juros</label>
-                            <comment>Número de parcelas sem acréscimo de juros</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>4</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </free_installments>
                     </fields>
                 </general>
             </groups>
