@@ -24,7 +24,7 @@ class UltraDev_Checkout_Model_Processor
             // 3. Frete
             $this->_setShipping($quote, $data);
 
-            // 4. Pagamento (placeholder — gateway real via método nativo)
+            // 4. Pagamento — delega totalmente ao gateway instalado
             $this->_setPayment($quote, $data);
 
             // 5. Finaliza o pedido
@@ -72,7 +72,6 @@ class UltraDev_Checkout_Model_Processor
         if ($customer->getId()) {
             $quote->setCustomer($customer);
         } else {
-            // Novo cliente — guest por padrão; pode ser convertido após o pedido
             $quote->setCheckoutMethod(Mage_Checkout_Model_Type_Onepage::METHOD_GUEST);
             $quote->setCustomerEmail($email);
             $quote->setCustomerFirstname($this->_getField($data, $tipoPessoa === 'pf' ? 'firstname' : 'resp_nome'));
@@ -108,68 +107,13 @@ class UltraDev_Checkout_Model_Processor
             'telephone'  => preg_replace('/\D/', '', $this->_getField($data, 'telephone')),
         ];
 
-        // Endereço de entrega
         $shippingAddress = $quote->getShippingAddress();
         $shippingAddress->addData($addressData);
 
-        // Endereço de faturamento (igual ao de entrega se marcado)
         $billingAddress = $quote->getBillingAddress();
         $billingAddress->addData($addressData);
 
-        // CNPJ / CPF como atributo customizado (se existir no schema)
         if ($tipoPessoa === 'pf') {
             $taxvat = preg_replace('/\D/', '', $this->_getField($data, 'tax_document'));
         } else {
-            $taxvat = preg_replace('/\D/', '', $this->_getField($data, 'cnpj'));
-        }
-        $quote->setCustomerTaxvat($taxvat);
-    }
-
-    protected function _setShipping(Mage_Sales_Model_Quote $quote, array $data)
-    {
-        $shippingMethod = $this->_getField($data, 'shipping_method');
-
-        if (!$shippingMethod) {
-            return;
-        }
-
-        $shippingAddress = $quote->getShippingAddress();
-        $shippingAddress->setCollectShippingRates(true)
-                        ->collectShippingRates();
-
-        $shippingAddress->setShippingMethod($shippingMethod);
-        $quote->setShippingAddress($shippingAddress);
-    }
-
-    protected function _setPayment(Mage_Sales_Model_Quote $quote, array $data)
-    {
-        $method = $this->_getField($data, 'payment_method');
-
-        if (!$method) {
-            $method = 'checkmo'; // fallback seguro para testes
-        }
-
-        $paymentData = ['method' => $method];
-
-        // Cartão de crédito — passa dados brutos para o gateway instalado
-        if ($method === 'card' || strpos($method, 'credit') !== false) {
-            $paymentData['cc_number']      = $this->_getField($data, 'cc_number');
-            $paymentData['cc_exp_month']   = $this->_getField($data, 'cc_exp_month');
-            $paymentData['cc_exp_year']    = $this->_getField($data, 'cc_exp_year');
-            $paymentData['cc_cid']         = $this->_getField($data, 'cc_cid');
-            $paymentData['cc_installments']= $this->_getField($data, 'cc_installments');
-        }
-
-        $quote->getPayment()->importData($paymentData);
-    }
-
-    protected function _getField(array $data, $key, $default = '')
-    {
-        return isset($data[$key]) ? trim($data[$key]) : $default;
-    }
-
-    protected function __($string)
-    {
-        return Mage::helper('ultradev_checkout')->__($string);
-    }
-}
+            $taxvat = preg_replace('/\D/',
