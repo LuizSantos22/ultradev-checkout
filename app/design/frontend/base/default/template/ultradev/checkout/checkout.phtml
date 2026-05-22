@@ -1,26 +1,21 @@
 <?php
 /** @var UltraDev_Checkout_Block_Checkout $this */
-$items  = $this->getCartItems();
+$items = $this->getCartItems();
 $config = $this->getCheckoutConfig();
 $formKey = $config['formKey'];
+$paymentMethods = $this->getPaymentMethods();
 ?>
-
-<!-- =============================================
-     HEADER
-============================================= -->
 <header class="checkout-header">
   <div class="checkout-header-inner">
     <div class="logo">
       <?php
-      $logoSrc  = Mage::getDesign()->getSkinUrl('images/logo.gif');
+      $logoSrc = Mage::getDesign()->getSkinUrl('images/logo.gif');
       $logoName = Mage::getStoreConfig('design/header/logo_alt');
       ?>
       <a href="<?php echo Mage::getBaseUrl(); ?>">
         <img src="<?php echo $logoSrc; ?>" alt="<?php echo $this->htmlEscape($logoName); ?>" style="max-height:48px;">
       </a>
     </div>
-
-    <!-- TIMELINE -->
     <div class="tl-wrap">
       <div class="tl">
         <div class="tl-step active" id="tl-s1">
@@ -57,21 +52,15 @@ $formKey = $config['formKey'];
         </div>
       </div>
     </div>
-
-    <!-- TrustedSite / Selos -->
     <div class="trustedsite">
       <span style="font-size:11px;color:#718096;">🔒 Compra Segura</span>
     </div>
   </div>
 </header>
 
-<!-- =============================================
-     BODY
-============================================= -->
 <main class="checkout-body">
   <div class="checkout-left">
-
-    <!-- ===== SEÇÃO 1: IDENTIFICAÇÃO ===== -->
+    <!-- SEÇÃO 1: IDENTIFICAÇÃO -->
     <section class="box">
       <div class="sec-title">
         <div class="sec-title-left">
@@ -80,165 +69,121 @@ $formKey = $config['formKey'];
         </div>
         <a class="login-link" onclick="UltraCheckout.openLoginModal()"><?php echo $this->__('Já é cliente? Entrar'); ?></a>
       </div>
-
-      <!-- Toggle PF / PJ -->
       <div class="tp-toggle">
         <button type="button" class="tp-btn on" data-type="pf" onclick="UltraCheckout.switchType('pf')"><?php echo $this->__('Pessoa Física'); ?></button>
         <button type="button" class="tp-btn" data-type="pj" onclick="UltraCheckout.switchType('pj')"><?php echo $this->__('Pessoa Jurídica'); ?></button>
       </div>
-
-      <!-- E-mail + Senha -->
       <div class="g2">
         <div class="fl">
-          <input type="email" id="email" name="email" placeholder=" "
-                 oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+          <input type="email" id="email" name="email" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
           <label for="email"><?php echo $this->__('E-mail'); ?></label>
         </div>
         <div class="fl">
-          <input type="password" id="senha" name="senha" placeholder=" "
-                 oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+          <input type="password" id="senha" name="senha" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
           <label for="senha"><?php echo $this->__('Criar senha'); ?></label>
         </div>
       </div>
-
-      <!-- PESSOA FÍSICA -->
       <div id="bloco-pf">
         <div class="g2">
           <div class="fl">
-            <input type="text" id="firstname" name="firstname" placeholder=" "
-                   oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="firstname" name="firstname" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="firstname"><?php echo $this->__('Nome'); ?></label>
           </div>
           <div class="fl">
-            <input type="text" id="lastname" name="lastname" placeholder=" "
-                   oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="lastname" name="lastname" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="lastname"><?php echo $this->__('Sobrenome'); ?></label>
           </div>
         </div>
         <div class="g2">
           <div class="fl">
-            <input type="text" id="tax_document" name="tax_document" placeholder=" " maxlength="14"
-                   oninput="UltraCheckout.fmtCpf(this);UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="tax_document" name="tax_document" placeholder=" " maxlength="14" oninput="UltraCheckout.fmtCpf(this);UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="tax_document"><?php echo $this->__('CPF'); ?></label>
           </div>
           <div class="fl">
-            <input type="text" id="nascimento_pf" name="nascimento_pf" placeholder=" " maxlength="10"
-                   oninput="UltraCheckout.fmtData(this);UltraCheckout.handleInputState(this);">
+            <input type="text" id="nascimento_pf" name="nascimento_pf" placeholder=" " maxlength="10" oninput="UltraCheckout.fmtData(this);UltraCheckout.handleInputState(this);">
             <label for="nascimento_pf"><?php echo $this->__('Data de nascimento'); ?></label>
           </div>
         </div>
       </div>
-
-      <!-- PESSOA JURÍDICA -->
       <div id="bloco-pj" class="hidden">
         <div class="g2">
           <div class="fl">
-            <input type="text" id="resp_nome" name="resp_nome" placeholder=" "
-                   oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="resp_nome" name="resp_nome" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="resp_nome"><?php echo $this->__('Nome do responsável'); ?></label>
           </div>
           <div class="fl">
-            <input type="text" id="resp_sobrenome" name="resp_sobrenome" placeholder=" "
-                   oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="resp_sobrenome" name="resp_sobrenome" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="resp_sobrenome"><?php echo $this->__('Sobrenome do responsável'); ?></label>
           </div>
         </div>
         <div class="g2">
           <div class="fl">
-            <input type="text" id="tax_document_pj" name="tax_document_pj" placeholder=" " maxlength="14"
-                   oninput="UltraCheckout.fmtCpf(this);UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="tax_document_pj" name="tax_document_pj" placeholder=" " maxlength="14" oninput="UltraCheckout.fmtCpf(this);UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="tax_document_pj"><?php echo $this->__('CPF do responsável'); ?></label>
           </div>
           <div class="fl">
-            <input type="text" id="nascimento_pj" name="nascimento_pj" placeholder=" " maxlength="10"
-                   oninput="UltraCheckout.fmtData(this);UltraCheckout.handleInputState(this);">
+            <input type="text" id="nascimento_pj" name="nascimento_pj" placeholder=" " maxlength="10" oninput="UltraCheckout.fmtData(this);UltraCheckout.handleInputState(this);">
             <label for="nascimento_pj"><?php echo $this->__('Data de nascimento'); ?></label>
           </div>
         </div>
         <div class="fl" style="margin-bottom:16px;">
-          <input type="text" id="razao_social" name="razao_social" placeholder=" "
-                 oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+          <input type="text" id="razao_social" name="razao_social" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
           <label for="razao_social"><?php echo $this->__('Razão Social'); ?></label>
         </div>
         <div class="g2">
           <div class="fl">
-            <input type="text" id="cnpj" name="cnpj" placeholder=" " maxlength="18"
-                   oninput="UltraCheckout.fmtCnpj(this);UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="cnpj" name="cnpj" placeholder=" " maxlength="18" oninput="UltraCheckout.fmtCnpj(this);UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="cnpj"><?php echo $this->__('CNPJ'); ?></label>
           </div>
           <div class="fl">
-            <input type="text" id="inscricao_estadual" name="inscricao_estadual" placeholder=" "
-                   oninput="UltraCheckout.handleInputState(this);">
+            <input type="text" id="inscricao_estadual" name="inscricao_estadual" placeholder=" " oninput="UltraCheckout.handleInputState(this);">
             <label for="inscricao_estadual"><?php echo $this->__('Inscrição Estadual'); ?></label>
           </div>
         </div>
       </div>
-
-      <!-- Telefone + CEP -->
       <div class="g2">
         <div class="fl">
-          <input type="tel" id="telephone" name="telephone" placeholder=" " maxlength="15"
-                 oninput="UltraCheckout.fmtTel(this);UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+          <input type="tel" id="telephone" name="telephone" placeholder=" " maxlength="15" oninput="UltraCheckout.fmtTel(this);UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
           <label for="telephone"><?php echo $this->__('Telefone / WhatsApp'); ?></label>
         </div>
         <div class="fl">
-          <input type="text" id="postcode" name="postcode" placeholder=" " maxlength="9"
-                 oninput="UltraCheckout.fmtCep(this);UltraCheckout.checkCepDisplay(this);UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+          <input type="text" id="postcode" name="postcode" placeholder=" " maxlength="9" oninput="UltraCheckout.fmtCep(this);UltraCheckout.checkCepDisplay(this);UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
           <label for="postcode"><?php echo $this->__('CEP'); ?></label>
         </div>
       </div>
-
-      <!-- Campos de endereço (visíveis após CEP válido) -->
       <div id="address-fields-wrapper" style="display:none;">
         <div class="divider"><span><?php echo $this->__('Endereço de Entrega'); ?></span></div>
         <div class="g3">
           <div class="fl">
-            <input type="text" id="street" name="street" placeholder=" "
-                   oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="street" name="street" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="street"><?php echo $this->__('Endereço'); ?></label>
           </div>
           <div class="fl">
-            <input type="text" id="number" name="number" placeholder=" "
-                   oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="number" name="number" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="number"><?php echo $this->__('Número'); ?></label>
           </div>
           <div class="fl">
-            <input type="text" id="complement" name="complement" placeholder=" "
-                   oninput="UltraCheckout.handleInputState(this);">
+            <input type="text" id="complement" name="complement" placeholder=" " oninput="UltraCheckout.handleInputState(this);">
             <label for="complement"><?php echo $this->__('Complemento'); ?></label>
           </div>
         </div>
         <div class="g2">
           <div class="fl">
-            <input type="text" id="district" name="district" placeholder=" "
-                   oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="district" name="district" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="district"><?php echo $this->__('Bairro'); ?></label>
           </div>
           <div class="fl">
-            <input type="text" id="city" name="city" placeholder=" "
-                   oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <input type="text" id="city" name="city" placeholder=" " oninput="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
             <label for="city"><?php echo $this->__('Cidade'); ?></label>
           </div>
         </div>
         <div class="g2">
           <div class="fl">
-            <select id="region_id" name="region_id"
-                    onchange="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
+            <select id="region_id" name="region_id" onchange="UltraCheckout.handleInputState(this);UltraCheckout.refreshTimeline();">
               <option value="">Selecione</option>
-              <option value="AC">Acre</option><option value="AL">Alagoas</option>
-              <option value="AP">Amapá</option><option value="AM">Amazonas</option>
-              <option value="BA">Bahia</option><option value="CE">Ceará</option>
-              <option value="DF">Distrito Federal</option><option value="ES">Espírito Santo</option>
-              <option value="GO">Goiás</option><option value="MA">Maranhão</option>
-              <option value="MT">Mato Grosso</option><option value="MS">Mato Grosso do Sul</option>
-              <option value="MG">Minas Gerais</option><option value="PA">Pará</option>
-              <option value="PB">Paraíba</option><option value="PR">Paraná</option>
-              <option value="PE">Pernambuco</option><option value="PI">Piauí</option>
-              <option value="RJ">Rio de Janeiro</option><option value="RN">Rio Grande do Norte</option>
-              <option value="RS">Rio Grande do Sul</option><option value="RO">Rondônia</option>
-              <option value="RR">Roraima</option><option value="SC">Santa Catarina</option>
-              <option value="SP">São Paulo</option><option value="SE">Sergipe</option>
-              <option value="TO">Tocantins</option>
+              <?php foreach (Mage::getResourceModel('directory/region_collection')->load()->toOptionArray() as $region): ?>
+                <option value="<?php echo $region['value']; ?>"><?php echo $region['label']; ?></option>
+              <?php endforeach; ?>
             </select>
             <label for="region_id"><?php echo $this->__('Estado'); ?></label>
           </div>
@@ -256,7 +201,7 @@ $formKey = $config['formKey'];
       </div>
     </section>
 
-    <!-- ===== SEÇÃO 2: FRETE ===== -->
+    <!-- SEÇÃO 2: FRETE -->
     <section class="box">
       <div class="sec-title">
         <div class="sec-title-left">
@@ -271,7 +216,7 @@ $formKey = $config['formKey'];
       </div>
     </section>
 
-    <!-- ===== SEÇÃO 3: PAGAMENTO ===== -->
+    <!-- SEÇÃO 3: PAGAMENTO (DINÂMICO) -->
     <section class="box">
       <div class="sec-title">
         <div class="sec-title-left">
@@ -279,138 +224,51 @@ $formKey = $config['formKey'];
           <h2><?php echo $this->__('Forma de Pagamento'); ?></h2>
         </div>
       </div>
-      <div class="payment-methods">
-        <!-- PIX -->
-        <div class="outlined-card" data-pay="pix" onclick="UltraCheckout.selectPayment(this,'pix')">
-          <div class="outlined-head">
-            <div>
-              <div class="outlined-label">
-                <i class="ti ti-qrcode" style="font-size:16px;margin-right:6px;vertical-align:middle;"></i>
-                <?php echo $this->__('Pix'); ?>
-              </div>
-              <div class="outlined-sub">
-                <?php echo $this->__('Aprovação imediata'); ?> — <?php echo $config['pixDiscount']; ?>% <?php echo $this->__('de desconto extra'); ?>
-              </div>
-            </div>
-            <div class="radio"><div class="radio-dot"></div></div>
-          </div>
-          <div class="payment-body">
-            <p style="font-size:13px;color:var(--text-muted);line-height:1.5;">
-              <?php echo $this->__('Após clicar em "Finalizar Pedido", um QR Code será exibido para pagamento imediato.'); ?>
-            </p>
-          </div>
-        </div>
-
-        <!-- CARTÃO DE CRÉDITO -->
-        <div class="outlined-card" data-pay="card" onclick="UltraCheckout.selectPayment(this,'card')">
-          <div class="outlined-head">
-            <div>
-              <div class="outlined-label">
-                <i class="ti ti-credit-card" style="font-size:16px;margin-right:6px;vertical-align:middle;"></i>
-                <?php echo $this->__('Cartão de Crédito'); ?>
-              </div>
-              <div class="outlined-sub">
-                <?php echo $this->__('Em até'); ?> <?php echo $config['maxInstallments']; ?>x
-                (<?php echo $this->__('até'); ?> <?php echo $config['freeInstallments']; ?>x <?php echo $this->__('sem juros'); ?>)
-              </div>
-            </div>
-            <div class="radio"><div class="radio-dot"></div></div>
-          </div>
-          <div class="payment-body">
-            <div class="card-grid">
-              <div class="fl">
-                <input type="text" id="cc_number" name="cc_number" placeholder=" "
-                       oninput="UltraCheckout.handleInputState(this);">
-                <label><?php echo $this->__('Número do Cartão'); ?></label>
-              </div>
-              <div class="fl">
-                <input type="text" id="cc_name" name="cc_name" placeholder=" "
-                       oninput="UltraCheckout.handleInputState(this);">
-                <label><?php echo $this->__('Nome impresso no Cartão'); ?></label>
-              </div>
-              <div class="card-grid two">
-                <div class="fl">
-                  <input type="text" id="cc_expiry" name="cc_expiry" placeholder="MM/AA"
-                         class="placeholder-lazy" oninput="UltraCheckout.handleInputState(this);">
-                  <label><?php echo $this->__('Validade'); ?></label>
+      <div class="payment-methods" id="payment-methods-container">
+        <?php if (!empty($paymentMethods)): ?>
+          <?php foreach ($paymentMethods as $method): ?>
+            <div class="outlined-card" data-pay="<?php echo $this->htmlEscape($method['code']); ?>" onclick="UltraCheckout.selectPayment(this,'<?php echo $this->htmlEscape($method['code']); ?>')">
+              <div class="outlined-head">
+                <div>
+                  <div class="outlined-label"><?php echo $this->htmlEscape($method['title']); ?></div>
                 </div>
-                <div class="fl">
-                  <input type="password" id="cc_cid" name="cc_cid" maxlength="4" placeholder=" "
-                         oninput="UltraCheckout.handleInputState(this);">
-                  <label><?php echo $this->__('CVV'); ?></label>
-                </div>
+                <div class="radio"><div class="radio-dot"></div></div>
               </div>
-              <div class="installment">
-                <small><?php echo $this->__('Parcelamento'); ?></small>
-                <div class="installment-value">
-                  <select id="cc_installments" name="cc_installments" style="border:none;background:transparent;font-size:14px;font-weight:500;width:100%;outline:none;">
-                    <option id="installment-text" value="1">1x — calculando...</option>
-                  </select>
-                  <i class="ti ti-chevron-down" style="color:var(--text-muted)"></i>
-                </div>
+              <div class="payment-body">
+                <?php echo $method['block']; ?>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- BOLETO -->
-        <div class="outlined-card" data-pay="boleto" onclick="UltraCheckout.selectPayment(this,'boleto')">
-          <div class="outlined-head">
-            <div>
-              <div class="outlined-label">
-                <i class="ti ti-barcode" style="font-size:16px;margin-right:6px;vertical-align:middle;"></i>
-                <?php echo $this->__('Boleto Bancário'); ?>
-              </div>
-              <div class="outlined-sub">
-                <?php echo $this->__('Vencimento em 1 dia útil — Compensação em até 48h'); ?>
-              </div>
-            </div>
-            <div class="radio"><div class="radio-dot"></div></div>
-          </div>
-          <div class="payment-body">
-            <p style="font-size:13px;color:var(--text-muted);line-height:1.5;">
-              <?php echo $this->__('O boleto será gerado após finalizar o pedido. Imprima ou pague pelo aplicativo do seu banco.'); ?>
-            </p>
-          </div>
-        </div>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <p style="font-size:13px;color:var(--text-muted);">Nenhum método de pagamento disponível.</p>
+        <?php endif; ?>
       </div>
     </section>
+  </div>
 
-  </div><!-- /checkout-left -->
-
-  <!-- ===== RESUMO DO PEDIDO ===== -->
+  <!-- RESUMO DO PEDIDO -->
   <aside class="checkout-right">
     <div class="box">
       <div class="sec-title">
         <div class="sec-title-left">
-          <span class="step-badge" style="background:var(--bg-main);color:var(--text-main);">
-            <i class="ti ti-shopping-cart" style="font-size:14px;"></i>
-          </span>
+          <span class="step-badge"><i class="ti ti-shopping-cart" style="font-size:14px;"></i></span>
           <h2><?php echo $this->__('Resumo do Pedido'); ?></h2>
         </div>
       </div>
-
-      <!-- Itens -->
       <div class="summary-items">
         <?php foreach ($items as $item): ?>
         <div class="summary-item">
-          <img class="summary-thumb" src="<?php echo $this->htmlEscape($item['image']); ?>"
-               alt="<?php echo $this->htmlEscape($item['name']); ?>">
+          <img class="summary-thumb" src="<?php echo $this->htmlEscape($item['image']); ?>" alt="<?php echo $this->htmlEscape($item['name']); ?>">
           <div class="summary-content">
             <div class="summary-row-top">
               <span class="summary-name"><?php echo $this->htmlEscape($item['name']); ?></span>
-              <span class="summary-price" id="item-total-<?php echo $item['item_id']; ?>">
-                <?php echo Mage::helper('core')->currency($item['row_total'], true, false); ?>
-              </span>
+              <span class="summary-price" id="item-total-<?php echo $item['item_id']; ?>"><?php echo Mage::helper('core')->currency($item['row_total'], true, false); ?></span>
             </div>
             <div class="summary-row-bottom">
               <span class="summary-var"><?php echo $this->htmlEscape($item['options']); ?></span>
               <div class="usc-qty-wrap">
                 <button type="button" class="usc-qty-btn" onclick="UltraCheckout.updateQty(this,-1)">−</button>
-                <input class="usc-qty" type="text" value="<?php echo $item['qty']; ?>"
-                       data-price="<?php echo $item['price']; ?>"
-                       data-target="item-total-<?php echo $item['item_id']; ?>"
-                       readonly style="width:28px;text-align:center;border:none;font-size:13px;font-weight:600;">
+                <input class="usc-qty" type="text" value="<?php echo $item['qty']; ?>" data-price="<?php echo $item['price']; ?>" data-target="item-total-<?php echo $item['item_id']; ?>" readonly style="width:28px;text-align:center;border:none;font-size:13px;font-weight:600;">
                 <button type="button" class="usc-qty-btn" onclick="UltraCheckout.updateQty(this,1)">+</button>
               </div>
             </div>
@@ -418,20 +276,13 @@ $formKey = $config['formKey'];
         </div>
         <?php endforeach; ?>
       </div>
-
-      <!-- Cupom -->
       <div class="g2" style="margin-bottom:0;">
         <div class="fl">
           <input type="text" id="coupon_code" placeholder=" " oninput="UltraCheckout.handleInputState(this);">
           <label for="coupon_code"><?php echo $this->__('Código do Cupom'); ?></label>
         </div>
-        <button type="button" class="btn-continue" style="height:52px;"
-                onclick="UltraCheckout.applyCoupon()">
-          <?php echo $this->__('Aplicar'); ?>
-        </button>
+        <button type="button" class="btn-continue" style="height:52px;" onclick="UltraCheckout.applyCoupon()"><?php echo $this->__('Aplicar'); ?></button>
       </div>
-
-      <!-- Totais -->
       <div class="totals-block" style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:20px;">
         <div class="total-row">
           <span class="total-label"><?php echo $this->__('Subtotal'); ?></span>
@@ -449,18 +300,10 @@ $formKey = $config['formKey'];
           <span class="total-label"><?php echo $this->__('Total'); ?></span>
           <span class="total-value" id="total-val">—</span>
         </div>
-        <div style="font-size:12px;color:var(--text-muted);text-align:right;margin-top:4px;">
-          <span id="installment-text"></span>
-        </div>
       </div>
-
-      <!-- Botão finalizar -->
-      <button type="button" id="btn-finalize" class="btn-continue" style="width:100%;margin-top:24px;"
-              onclick="UltraCheckout.finalizeOrder()">
+      <button type="button" id="btn-finalize" class="btn-continue" style="width:100%;margin-top:24px;" onclick="UltraCheckout.finalizeOrder()">
         <?php echo $this->__('Finalizar Pedido'); ?> <i class="ti ti-lock" style="margin-left:6px;"></i>
       </button>
-
-      <!-- Selos de segurança -->
       <div style="display:flex;justify-content:center;gap:12px;margin-top:16px;opacity:0.6;">
         <span style="font-size:11px;">🔒 SSL</span>
         <span style="font-size:11px;">✓ Compra Protegida</span>
@@ -472,9 +315,7 @@ $formKey = $config['formKey'];
 <!-- MODAL LOGIN -->
 <div class="modal-overlay" id="loginModal" onclick="UltraCheckout.closeModalOutside(event)">
   <div class="modal-box">
-    <button class="modal-close" onclick="UltraCheckout.closeLoginModal()">
-      <i class="ti ti-x"></i>
-    </button>
+    <button class="modal-close" onclick="UltraCheckout.closeLoginModal()"><i class="ti ti-x"></i></button>
     <h3 style="text-align:center;margin-bottom:20px;font-size:18px;"><?php echo $this->__('Acessar Conta'); ?></h3>
     <button class="social-btn social-btn-google">
       <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
@@ -495,17 +336,11 @@ $formKey = $config['formKey'];
         <input type="password" id="login_senha" placeholder=" " oninput="UltraCheckout.handleInputState(this)">
         <label><?php echo $this->__('Senha'); ?></label>
       </div>
-      <button class="btn-continue" style="margin-top:4px;" onclick="UltraCheckout.doLogin()">
-        <?php echo $this->__('Acessar Conta'); ?>
-      </button>
+      <button class="btn-continue" style="margin-top:4px;" onclick="UltraCheckout.doLogin()"><?php echo $this->__('Acessar Conta'); ?></button>
     </div>
     <div style="text-align:center;margin-top:16px;">
-      <a style="font-size:12px;color:var(--text-muted);text-decoration:underline;cursor:pointer;">
-        <?php echo $this->__('Esqueceu sua senha?'); ?>
-      </a>
+      <a style="font-size:12px;color:var(--text-muted);text-decoration:underline;cursor:pointer;"><?php echo $this->__('Esqueceu sua senha?'); ?></a>
     </div>
   </div>
 </div>
-
-<!-- Form Key oculto para CSRF -->
 <input type="hidden" id="form_key" value="<?php echo $formKey; ?>">
