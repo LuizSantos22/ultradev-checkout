@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <ultradev_checkout_index_index>
+        <label>Ultra Checkout — Página Principal</label>
+
+        <!-- Remove tudo e usa root próprio -->
+        <remove name="root" />
+
+        <block type="ultradev_checkout/checkout" name="root"
+               template="ultradev/checkout/root.phtml"
+               output="toHtml">
+
+            <block type="ultradev_checkout/checkout" name="ultradev.checkout"
+                   template="ultradev/checkout/checkout.phtml" />
+
+        </block>
+    </ultradev_checkout_index_index>
+</layout>
