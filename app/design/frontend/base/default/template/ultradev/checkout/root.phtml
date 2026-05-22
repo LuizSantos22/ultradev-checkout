@@ -1,0 +1,25 @@
+<?php
+/** @var UltraDev_Checkout_Block_Checkout $this */
+$mediaUrl  = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN) . 'frontend/base/default/';
+$skinUrl   = $mediaUrl . 'css/ultradev/ultradev-checkout.css';
+$jsUrl     = $mediaUrl . 'js/ultradev/ultradev-checkout.js';
+?><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><?php echo $this->__('Finalizar Pedido'); ?> — <?php echo Mage::app()->getStore()->getName(); ?></title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="<?php echo $skinUrl; ?>">
+</head>
+<body>
+<div class="checkout-page">
+    <?php echo $this->getChildHtml('ultradev.checkout'); ?>
+</div>
+<script>
+    var UltraCheckoutConfig = <?php echo $this->getCheckoutConfigJson(); ?>;
+</script>
+<script src="<?php echo $jsUrl; ?>"></script>
+</body>
+</html>
