@@ -105,8 +105,6 @@ input, select, button, textarea { font-family: inherit; }
 .tl-step.done .tl-label    { color: var(--text-main); }
 .tl-step.done-green .tl-label { color: var(--success); }
 
-.trustedsite { display: flex; justify-content: flex-end; align-items: center; }
-
 /* =========================================================
    LAYOUT
 ========================================================= */
@@ -116,8 +114,12 @@ input, select, button, textarea { font-family: inherit; }
   display: grid; grid-template-columns: minmax(0, 1fr) 440px;
   gap: 32px; align-items: start;
 }
-.checkout-left  { display: flex; flex-direction: column; gap: 24px; }
-.checkout-right { position: sticky; top: 110px; align-self: start; }
+.checkout-left { display: flex; flex-direction: column; gap: 24px; }
+.checkout-right {
+  position: sticky;
+  top: 110px;
+  align-self: start;
+}
 
 /* =========================================================
    BOXES
@@ -153,6 +155,7 @@ input, select, button, textarea { font-family: inherit; }
 .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .g3 { display: grid; grid-template-columns: 1fr 140px 160px; gap: 16px; margin-bottom: 16px; }
 .fl { position: relative; }
+.fl.fl-mb16 { margin-bottom: 16px; }
 
 .fl input, .fl select {
   width: 100%; height: 52px;
@@ -183,6 +186,12 @@ input, select, button, textarea { font-family: inherit; }
 .fl input.placeholder-lazy::placeholder { color: transparent; }
 .fl input.placeholder-lazy:focus::placeholder { color: var(--text-muted); }
 .fl input.placeholder-lazy.has::placeholder { color: var(--text-muted); }
+
+/* Wrapper de endereço (identificação) — oculto até o CEP ser preenchido */
+#address-fields-wrapper.js-hidden { display: none; }
+
+/* Wrapper de endereço alternativo (billing) — oculto até marcar o checkbox */
+#billing-address-wrapper.billing-address-wrapper { display: none; margin-top: 16px; }
 
 /* =========================================================
    PF/PJ TOGGLE
@@ -235,7 +244,7 @@ input, select, button, textarea { font-family: inherit; }
   padding: 18px 20px; display: flex;
   align-items: center; justify-content: space-between;
 }
-.outlined-label { font-size: 14px; font-weight: 600; color: var(--text-main); }
+.outlined-label { font-size: 14px; font-weight: 500; color: var(--text-main); }
 .outlined-sub   { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 .outlined-price { font-size: 14px; font-weight: 700; color: var(--text-main); }
 
@@ -256,6 +265,7 @@ input, select, button, textarea { font-family: inherit; }
 .outlined-card.active .payment-body { display: block; }
 .card-grid { display: grid; gap: 14px; }
 .card-grid.two { grid-template-columns: 1fr 1fr; }
+.card-grid.card-grid--lg { gap: 16px; }
 
 .installment {
   border: 1px solid var(--border-color); border-radius: var(--radius-sm);
@@ -302,11 +312,64 @@ input, select, button, textarea { font-family: inherit; }
   transition: var(--transition-smooth);
 }
 .usc-qty-btn:hover { background: var(--bg-main); }
+.usc-qty {
+  width: 28px; text-align: center;
+  border: none; background: transparent;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Área do cupom no resumo do pedido */
+.coupon-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 16px;
+}
+.coupon-msg {
+  display: none;
+  font-size: 13px;
+  margin-top: 5px;
+  margin-bottom: 16px;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+/* =========================================================
+   TOGGLE CUPOM / COMENTÁRIOS
+========================================================= */
+.cc-toggle-row {
+  display: flex;
+  justify-content: space-between;
+}
+.cc-toggle-btn {
+  width: 48%;
+  height: 52px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+.cc-toggle-btn:hover {
+  border-color: var(--primary);
+}
+.cc-toggle-btn.active {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.cc-toggle-btn.error {
+  border-color: #b73741;
+  color: #b73741;
+}
 
 /* =========================================================
    TOTALS
 ========================================================= */
 .totals-block { display: flex; flex-direction: column; gap: 10px; }
+.totals-block--top { margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px; }
 .total-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
 .total-label { color: var(--text-muted); }
 .total-value { font-weight: 600; color: var(--text-main); }
@@ -324,7 +387,24 @@ input, select, button, textarea { font-family: inherit; }
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .btn-continue:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(44,133,200,0.3); }
-.btn-continue:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.btn-continue:disabled,
+.btn-continue[disabled] { opacity: 0.75; cursor: default; transform: none; }
+.btn-continue.btn-continue--tight { margin-top: 4px; }
+.btn-continue.btn-finalize { margin-top: 24px; }
+
+.btn-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.45);
+  border-top-color: #fff;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 8px;
+  animation: btn-spin 0.6s linear infinite;
+}
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
 
 /* =========================================================
    MODAL
@@ -345,6 +425,7 @@ input, select, button, textarea { font-family: inherit; }
   box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
 .modal-overlay.show .modal-box { transform: translateY(0); }
+.modal-title { text-align: center; margin-bottom: 20px; font-size: 18px; }
 .modal-close {
   position: absolute; top: 16px; right: 16px;
   border: none; background: transparent; cursor: pointer;
@@ -363,12 +444,140 @@ input, select, button, textarea { font-family: inherit; }
 }
 .social-btn:hover { border-color: var(--border-color-hover); background: var(--bg-main); }
 
+.login-error {
+  display: none;
+  color: #e53e3e;
+  font-size: 13px;
+  margin-bottom: 8px;
+  padding: 8px;
+  background: #fff5f5;
+  border-radius: 6px;
+  border: 1px solid #fed7d7;
+}
+
+.forgot-password-wrap { text-align: center; margin-top: 16px; }
+.forgot-password-link {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* =========================================================
+   VALIDAÇÃO DE CAMPOS (CPF / Data de Nascimento)
+========================================================= */
+.field-invalid {
+  border-color: #e53e3e !important;
+  background-color: #fff5f5;
+}
+.field-error-msg {
+  display: none;
+  font-size: 8px;
+  color: #e53e3e;
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   SECURE PAYMENT / TRUSTEDSITE
+========================================================= */
+.trustedsite {
+  display: flex; justify-content: flex-end; align-items: center;
+  font-size: 11px; color: var(--success);
+}
+.trustedsite.clickable { cursor: pointer; }
+.trustedsite svg { transform: translateY(2px); }
+.trustedsite i { margin-right: 3px; vertical-align: middle; color: var(--success); }
+
+.secure-note {
+  display: flex; justify-content: center; align-items: center;
+  font-size: 13px; gap: 5px; margin-top: 16px;
+  opacity: 0.7; color: var(--success);
+}
+.secure-note.clickable { cursor: pointer; }
+.secure-note i { color: var(--success); }
+
+.secure-modal-content p {
+  font-size: 13px; color: var(--text-muted);
+  line-height: 1.6; margin-bottom: 12px;
+}
+.secure-certificates-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 16px; margin-top: 16px;
+}
+.secure-certificates-grid img { width: 100%; height: auto; }
+
+/* Widget oficial TrustedSite: badge mantido funcional, porém invisível
+   — o clique real é disparado via .secure-note, que abre o modal customizado */
+#trustedsite-tm-image {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* =========================================================
+   MODAL DE CONFIRMAÇÃO DE REMOÇÃO (gerado via JS)
+========================================================= */
+.usc-remove-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.usc-remove-modal-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px 24px;
+  max-width: 340px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+.usc-remove-modal-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+.usc-remove-modal-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+.usc-remove-modal-text {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 22px;
+}
+.usc-remove-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.usc-remove-modal-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.usc-remove-modal-btn--cancel {
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+}
+.usc-remove-modal-btn--confirm {
+  border: none;
+  background: #e53935;
+  color: #fff;
+  font-weight: 600;
+}
+
 /* =========================================================
    RESPONSIVE
 ========================================================= */
 @media (max-width: 900px) {
   .checkout-body { grid-template-columns: 1fr; }
-  .checkout-right { position: static; }
+  .checkout-right { position: static; height: auto; }
   .checkout-header-inner { grid-template-columns: 1fr; justify-items: center; gap: 12px; }
 }
 @media (max-width: 600px) {
@@ -376,4 +585,6 @@ input, select, button, textarea { font-family: inherit; }
   .box { padding: 20px; }
   .g2 { grid-template-columns: 1fr; }
   .g3 { grid-template-columns: 1fr; }
+  .checkout-header { padding: 10px 0; }
+  .tl-wrap { display: none; }
 }
