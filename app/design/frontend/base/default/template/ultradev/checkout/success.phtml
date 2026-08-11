@@ -1,0 +1,272 @@
+<?php
+$_order = Mage::getSingleton('checkout/session')->getLastRealOrder();
+if (!$_order || !$_order->getId()) {
+    $this->_redirect('ultra-checkout');
+    return;
+}
+
+$_payment      = $_order->getPayment();
+$_method       = $_payment->getMethodInstance()->getCode();
+$_methodTitle  = $_payment->getMethodInstance()->getTitle();
+$_incrementId  = $_order->getIncrementId();
+$_customerName = $_order->getCustomerFirstname();
+$_status       = $_order->getStatus();
+$_methodLower  = strtolower($_method);
+
+switch ($_status) {
+    case 'processing':
+        $statusLabel  = 'Pagamento confirmado';
+        $statusIcon   = 'bi-check-circle-fill';
+        $statusColor  = '#28a745';
+        $statusBg     = '#e8f5e9';
+        $statusBorder = '#a5d6a7';
+        $statusDesc   = 'Seu pagamento foi aprovado. Estamos preparando seu pedido.';
+        break;
+    case 'pending':
+    case 'pending_payment':
+        $statusLabel  = 'Aguardando pagamento';
+        $statusIcon   = 'bi-clock-history';
+        $statusColor  = '#e08a1e';
+        $statusBg     = '#fdf1e2';
+        $statusBorder = '#f3caa0';
+        $statusDesc   = 'Seu pedido foi recebido. Assim que o pagamento for confirmado enviaremos um e-mail.';
+        break;
+    case 'payment_review':
+        $statusLabel  = 'Pagamento em análise';
+        $statusIcon   = 'bi-hourglass-split';
+        $statusColor  = '#2c85c8';
+        $statusBg     = '#eaf4fb';
+        $statusBorder = '#a9d3ee';
+        $statusDesc   = 'Seu pagamento está sendo analisado. Em breve você receberá uma atualização.';
+        break;
+    default:
+        $statusLabel  = 'Em processamento';
+        $statusIcon   = 'bi-clock-history';
+        $statusColor  = '#e08a1e';
+        $statusBg     = '#fdf1e2';
+        $statusBorder = '#f3caa0';
+        $statusDesc   = 'Seu pedido está sendo processado. Você receberá atualizações por e-mail.';
+        break;
+}
+
+if (strpos($_methodLower, 'boleto') !== false || strpos($_methodLower, 'paghiper') !== false) {
+    $_payIcon = 'bi-upc-scan';
+} elseif (strpos($_methodLower, 'pix') !== false) {
+    $_payIcon = 'bi-lightning-charge-fill';
+} elseif (strpos($_methodLower, 'transfer') !== false || strpos($_methodLower, 'banktransfer') !== false) {
+    $_payIcon = 'bi-bank';
+} elseif (strpos($_methodLower, 'checkmo') !== false) {
+    $_payIcon = 'bi-cash';
+} elseif (strpos($_methodLower, 'paypal') !== false) {
+    $_payIcon = 'bi-paypal';
+} else {
+    $_payIcon = 'bi-credit-card-2-back-fill';
+}
+
+$_grandTotal   = Mage::helper('core')->currency($_order->getGrandTotal(), true, false);
+$_subtotal     = Mage::helper('core')->currency($_order->getSubtotal(), true, false);
+$_shippingAmt  = Mage::helper('core')->currency($_order->getShippingAmount(), true, false);
+$_discountAmt  = $_order->getDiscountAmount();
+$_shippingAddr = $_order->getShippingAddress();
+$_shippingDesc = $_order->getShippingDescription();
+
+$_canViewOrder = Mage::getSingleton('customer/session')->isLoggedIn();
+$_viewOrderUrl = Mage::getUrl('sales/order/view', ['order_id' => $_order->getId()]);
+
+// Coluna 1 — Pagamento
+$_paymentValue = $_methodTitle;
+
+// Coluna 2 — Frete / Entrega
+if ($_shippingAddr && $_shippingDesc) {
+    $_shippingParts = explode('-', $_shippingDesc, 2);
+    $_freteLabel = 'Frete';
+    $_freteValue = trim($_shippingParts[0]);
+    $_freteSub   = !empty($_shippingParts[1]) ? trim($_shippingParts[1]) : '';
+} else {
+    $_freteLabel = 'Entrega';
+    $_freteValue = 'Produto digital / Retirada';
+    $_freteSub   = 'Sem envio físico';
+}
+
+// Coluna 3 — Endereço de entrega / cobrança
+if ($_shippingAddr && $_shippingDesc) {
+    $_addrLabel = 'Endereço de entrega';
+    $_addrName  = $_shippingAddr->getName();
+    $_addrLine  = $_shippingAddr->format('oneline');
+} else {
+    $_billingAddr = $_order->getBillingAddress();
+    $_addrLabel = 'Endereço de cobrança';
+    $_addrName  = $_billingAddr->getName();
+    $_addrLine  = $_billingAddr->format('oneline');
+}
+// format('oneline') já inclui o nome do destinatário no início — removemos aqui
+// porque o nome já é exibido em destaque separadamente logo acima.
+if ($_addrName) {
+    $_addrLine = preg_replace('/^' . preg_quote($_addrName, '/') . '\s*,?\s*/u', '', $_addrLine, 1);
+}
+?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<?php echo Mage::getDesign()->getSkinUrl('ultradev/checkout/css/success.css') ?>">
+
+<div class="sv2">
+  <div class="sv2-label">
+
+    <i class="bi bi-check2-circle sv2-hero-icon"></i>
+
+    <div class="sv2-hero">
+      <h1>Pedido recebido!</h1>
+      <p>
+        <?php if ($_customerName): ?>
+          Obrigado pela confiança, <strong><?php echo htmlspecialchars($_customerName) ?></strong>.
+        <?php else: ?>
+          Obrigado pela confiança!
+        <?php endif; ?>
+        Você vai receber os detalhes no e-mail cadastrado.
+      </p>
+      <div class="sv2-order-code"><span class="sv2-dot"></span>Pedido #<?php echo htmlspecialchars($_incrementId) ?></div>
+      <div class="sv2-barcode" aria-hidden="true"></div>
+    </div>
+
+    <div class="sv2-perf"></div>
+
+    <div class="sv2-section">
+      <p class="sv2-section-eyebrow">Itens do pedido</p>
+      <?php foreach ($_order->getItemsCollection() as $_item): ?>
+        <?php if ($_item->getParentItem()) continue; ?>
+        <?php $_rowTotal = Mage::helper('core')->currency($_item->getRowTotal(), true, false); ?>
+        <div class="sv2-item-row">
+          <div class="sv2-item-icon">
+            <?php
+            $_imgUrl = '';
+            try {
+                $_product = Mage::getModel('catalog/product')->load($_item->getProductId());
+                if ($_product->getId()) {
+                    $_imgUrl = Mage::helper('catalog/image')->init($_product, 'small_image')->resize(88)->__toString();
+                }
+            } catch (Exception $e) {}
+            ?>
+            <?php if ($_imgUrl): ?>
+              <img src="<?php echo $_imgUrl ?>" alt="<?php echo htmlspecialchars($_item->getName()) ?>">
+            <?php else: ?>
+              <i class="bi bi-box-seam"></i>
+            <?php endif; ?>
+          </div>
+          <div class="sv2-item-meta">
+            <span class="sv2-name"><?php echo htmlspecialchars($_item->getName()) ?></span>
+            <span class="sv2-qty">Qtd: <?php echo (int)$_item->getQtyOrdered() ?></span>
+          </div>
+          <span class="sv2-item-price"><?php echo $_rowTotal ?></span>
+        </div>
+      <?php endforeach; ?>
+      <div class="sv2-totals">
+        <div class="sv2-total-line"><span>Subtotal</span><span><?php echo $_subtotal ?></span></div>
+        <div class="sv2-total-line"><span>Frete</span><span><?php echo $_shippingAmt ?></span></div>
+        <?php if ($_discountAmt): ?>
+        <div class="sv2-total-line"><span>Desconto</span><span><?php echo Mage::helper('core')->currency($_discountAmt, true, false) ?></span></div>
+        <?php endif; ?>
+        <div class="sv2-total-line grand"><span>Total</span><span><?php echo $_grandTotal ?></span></div>
+      </div>
+    </div>
+
+    <div class="sv2-perf"></div>
+
+    <div class="sv2-section">
+      <div class="sv2-info-grid">
+        <div class="sv2-info-block">
+          <span class="sv2-label-tag">Pagamento</span>
+          <span class="sv2-value"><?php echo htmlspecialchars($_paymentValue) ?></span>
+        </div>
+        <div class="sv2-info-block">
+          <span class="sv2-label-tag"><?php echo htmlspecialchars($_freteLabel) ?></span>
+          <span class="sv2-value"><?php echo htmlspecialchars($_freteValue) ?></span>
+          <?php if ($_freteSub): ?>
+          <div class="sv2-sub"><?php echo htmlspecialchars($_freteSub) ?></div>
+          <?php endif; ?>
+        </div>
+        <div class="sv2-info-block">
+          <span class="sv2-label-tag"><?php echo htmlspecialchars($_addrLabel) ?></span>
+          <span class="sv2-value"><?php echo htmlspecialchars($_addrName) ?></span>
+          <div class="sv2-sub"><?php echo nl2br(htmlspecialchars($_addrLine)) ?></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sv2-perf"></div>
+
+    <div class="sv2-section">
+      <div class="sv2-status-row">
+        <div class="sv2-status-badge" style="background:<?php echo $statusBg ?>;border:1px solid <?php echo $statusBorder ?>;color:<?php echo $statusColor ?>">
+          <i class="bi <?php echo $statusIcon ?>"></i>
+        </div>
+        <div>
+          <div class="sv2-status-title">
+            <span class="sv2-status-dot" style="background:<?php echo $statusColor ?>"></span>
+            <?php echo $statusLabel ?>
+          </div>
+          <p class="sv2-status-desc"><?php echo $statusDesc ?></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sv2-perf"></div>
+
+    <div class="sv2-section">
+      <p class="sv2-section-eyebrow">O que acontece agora</p>
+      <div class="sv2-route">
+        <div class="sv2-route-step">
+          <h4>Aprovação do pagamento</h4>
+          <p>Assim que confirmado, você recebe um e-mail automático.</p>
+        </div>
+        <div class="sv2-route-step pending">
+          <h4>Preparação</h4>
+          <p>Embalamos seu produto com proteção adequada para o transporte.</p>
+        </div>
+        <div class="sv2-route-step pending">
+          <h4>Envio e rastreamento</h4>
+          <p>O código de rastreamento é enviado por e-mail assim que despachado.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sv2-perf"></div>
+
+    <div class="sv2-section sv2-actions">
+      <?php if ($_canViewOrder): ?>
+      <a href="<?php echo $_viewOrderUrl ?>" class="sv2-btn sv2-btn-primary">Acompanhar pedido</a>
+      <?php else: ?>
+      <a href="<?php echo Mage::getUrl('customer/account/login') ?>" class="sv2-btn sv2-btn-primary">Entrar para acompanhar</a>
+      <?php endif; ?>
+      <button class="sv2-btn sv2-btn-secondary" onclick="window.print()">Imprimir</button>
+      <a href="<?php echo Mage::getBaseUrl() ?>" class="sv2-btn sv2-btn-secondary">Continuar comprando</a>
+    </div>
+
+    <div class="sv2-perf"></div>
+
+    <div class="sv2-section">
+      <p class="sv2-section-eyebrow">Precisa de ajuda</p>
+      <div class="sv2-support-links">
+        <a href="https://wa.me/551141166440" target="_blank" class="sv2-support-link">
+          <span class="sv2-support-icon wa">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12.02 2c-5.52 0-10 4.48-10 10 0 1.77.46 3.5 1.34 5.02L2 22l5.13-1.34A9.96 9.96 0 0 0 12.02 22c5.52 0 10-4.48 10-10s-4.48-10-10-10Zm0 18.16c-1.6 0-3.17-.43-4.53-1.24l-.32-.19-3.05.8.81-2.97-.21-.31A8.16 8.16 0 0 1 3.84 12c0-4.5 3.67-8.17 8.18-8.17 4.5 0 8.17 3.67 8.17 8.17 0 4.51-3.67 8.16-8.17 8.16Zm4.48-6.12c-.24-.12-1.44-.71-1.66-.79-.22-.08-.39-.12-.55.12-.16.24-.63.79-.78.95-.14.16-.29.18-.53.06-.24-.12-1.03-.38-1.96-1.21-.72-.65-1.21-1.44-1.35-1.68-.14-.24-.02-.37.11-.49.11-.11.24-.29.36-.43.12-.14.16-.24.24-.4.08-.16.04-.31-.02-.43-.06-.12-.55-1.33-.76-1.82-.2-.48-.4-.42-.55-.42-.14-.01-.31-.01-.47-.01-.16 0-.43.06-.65.31-.22.24-.86.84-.86 2.05 0 1.21.88 2.38 1 2.54.12.16 1.73 2.64 4.2 3.7.59.25 1.05.4 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28Z"/>
+            </svg>
+          </span>
+          <span class="sv2-support-text"><strong>WhatsApp Business</strong><span>(11) 4116-6440</span></span>
+        </a>
+        <a href="<?php echo Mage::getUrl('contacts') ?>" class="sv2-support-link">
+          <span class="sv2-support-icon mail">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="m2 6 10 7 10-7"/>
+            </svg>
+          </span>
+          <span class="sv2-support-text"><strong>Central de Atendimento</strong><span>Formulário de contato</span></span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="sv2-footnote">Uma cópia desta confirmação foi enviada para o seu e-mail &mdash; <a href="#" onclick="window.print(); return false;">clique aqui para imprimir</a></p>
+</div>
