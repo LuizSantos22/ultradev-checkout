@@ -1,135 +1,134 @@
 # UltraDev Checkout
 
-**One Step Checkout moderno para OpenMage / Magento 1.x**, com suporte a Pessoa Física e Jurídica, múltiplos meios de pagamento (Pix, Cartão de Crédito e Boleto) e integração nativa com o tema Ultimo.
+**Modern One Step Checkout for OpenMage / Magento 1.x**, with support for Individual (PF) and Business (PJ) customers, multiple payment methods (Pix, Credit Card and Boleto), and native integration with the Ultimo theme.
 
-Desenvolvido para substituir o checkout multi-etapas padrão do OpenMage por um fluxo único, moderno e responsivo, reduzindo abandono de carrinho e simplificando a experiência de compra.
-
----
-
-## ✨ Funcionalidades
-
-- **Checkout em página única** — endereço, frete, pagamento e revisão do pedido em uma só tela, sem recarregar a página.
-- **Suporte a PF e PJ** — alternância entre Pessoa Física (CPF) e Pessoa Jurídica (CNPJ, Razão Social, Inscrição Estadual), incluindo suporte ao novo formato alfanumérico de CNPJ da Receita Federal.
-- **Detecção de e-mail existente** — ao digitar um e-mail já cadastrado, o checkout abre automaticamente um modal de login, evitando erro de "e-mail duplicado" na finalização.
-- **Login via AJAX** — autenticação sem sair da página do checkout, com pré-preenchimento automático de endereço e dados cadastrais do cliente.
-- **Cadastro de conta integrado** — clientes novos podem criar conta durante o checkout, com validação de CPF (algoritmo oficial da Receita Federal) e data de nascimento (idade mínima de 16 anos).
-- **Cupom de desconto** — aplicação e remoção de cupons em tempo real via AJAX, com recálculo automático dos totais.
-- **Frete dinâmico** — cálculo de frete integrado ao endereço informado, com atualização automática dos métodos disponíveis.
-- **Múltiplos meios de pagamento** — Pix, Cartão de Crédito (com parcelamento) e Boleto.
-- **Campo de comentários do pedido** — o cliente pode adicionar observações que são salvas como nota interna do pedido.
-- **Endereço salvo automaticamente** — o endereço usado na compra é salvo no cadastro do cliente para agilizar compras futuras.
-- **Página de sucesso customizada** — resumo do pedido com itens, endereço, frete e status, com layout próprio.
+Built to replace OpenMage's default multi-step checkout with a single, modern, responsive flow, reducing cart abandonment and simplifying the purchase experience.
 
 ---
 
-## 📋 Requisitos
+## ✨ Features
 
-- OpenMage LTS 20.x (Magento 1.9 compatível)
-- PHP >= 7.4 (testado em PHP 8.2)
+- **Single-page checkout** — address, shipping, payment, and order review all on one screen, with no page reloads.
+- **Individual and Business support** — toggle between Individual (CPF) and Business (CNPJ, Company Name, State Registration), including support for Brazil's new alphanumeric CNPJ format.
+- **Existing email detection** — when a customer enters an email already registered, the checkout automatically opens a login modal, preventing "duplicate email" errors at checkout completion.
+- **AJAX login** — authenticate without leaving the checkout page, with automatic prefill of the customer's saved address and account data.
+- **Integrated account creation** — new customers can create an account during checkout, with CPF validation (official Receita Federal check-digit algorithm) and birthdate validation (minimum age of 16).
+- **Discount coupons** — real-time coupon application and removal via AJAX, with automatic total recalculation.
+- **Dynamic shipping** — shipping calculation tied to the entered address, with automatically updated available methods.
+- **Multiple payment methods** — Pix, Credit Card (with installments), and Boleto.
+- **Order comments field** — customers can add notes that are saved as an internal order comment.
+- **Automatic address saving** — the address used at checkout is saved to the customer's account to speed up future purchases.
+- **Custom success page** — order summary with items, address, shipping, and status, with its own layout.
+
+---
+
+## 📋 Requirements
+
+- OpenMage LTS 20.x (Magento 1.9 compatible)
+- PHP >= 7.4 (tested on PHP 8.2)
 - Composer
-- [`magento-hackathon/magento-composer-installer`](https://github.com/Cotya/magento-composer-installer) configurado no projeto
+- [`magento-hackathon/magento-composer-installer`](https://github.com/Cotya/magento-composer-installer) configured in the project
 
 ---
 
-## 🚀 Instalação
+## 🚀 Installation
 
-### Via Composer (recomendado)
+### Via Composer (recommended)
 
 ```bash
 composer require ultradev/magento-checkout
 ```
 
-O módulo usa `magento-deploystrategy: copy`, ou seja, os arquivos são **copiados** para dentro da estrutura do Magento (não symlinkados automaticamente pelo Composer). Após instalar ou atualizar o pacote, é necessário limpar o cache:
+The module uses `magento-deploystrategy: copy`, meaning files are **copied** into the Magento file structure (not automatically symlinked by Composer). After installing or updating the package, clear the cache:
 
 ```bash
 php n98-magerun.phar cache:flush
 ```
 
-> ⚠️ **Atenção**: por usar `copy` como estratégia de deploy, alterações feitas diretamente nos arquivos ativos (`app/code/community/...`) **não são refletidas automaticamente** de volta no pacote em `vendor/`, e vice-versa após um `composer update`. Sempre edite os arquivos na origem correta e sincronize manualmente quando necessário.
+> ⚠️ **Note**: because it uses `copy` as the deploy strategy, changes made directly to the active files (`app/code/community/...`) are **not automatically reflected** back into the package under `vendor/`, and vice versa after a `composer update`. Always edit the correct source files and sync manually when needed.
 
-### Via modman (instalação manual/desenvolvimento)
+### Via modman (manual/development install)
 
 ```bash
 modman link ultradev/magento-checkout
 ```
 
-O arquivo `modman` já mapeia todos os arquivos necessários, incluindo o layout específico do tema Ultimo (veja a seção [Estrutura do módulo](#-estrutura-do-módulo)).
+The `modman` file already maps all required files, including the theme-specific layout override for Ultimo (see [Module structure](#-module-structure)).
 
 ---
 
-## ⚙️ Configuração
+## ⚙️ Configuration
 
-Após a instalação, habilite o módulo em:
+After installation, enable the module at:
 
 **Admin → System → Configuration → UltraDev → Checkout**
 
-Configurações disponíveis incluem habilitar/desabilitar o redirecionamento automático do checkout padrão para o Ultra Checkout, e opções específicas de exibição de campos.
+Available settings include enabling/disabling automatic redirection from the default checkout to Ultra Checkout, plus field-specific display options.
 
 ---
 
-## 📁 Estrutura do módulo
-
+## 📁 Module structure
 app/code/community/UltraDev/Checkout/
 ├── Block/
-│ ├── Checkout.php → Bloco principal do checkout
-│ └── Success/Details.php → Bloco da página de sucesso
-├── Helper/Data.php → Helper geral do módulo
+│ ├── Checkout.php → Main checkout block
+│ └── Success/Details.php → Success page block
+├── Helper/Data.php → General module helper
 ├── Model/
-│ ├── Processor.php → Núcleo do processamento: cliente, endereços, frete, pagamento e submissão do pedido
-│ └── Observer.php → Redirecionamento automático do checkout padrão
+│ ├── Processor.php → Core processing: customer, addresses, shipping, payment, and order submission
+│ └── Observer.php → Automatic redirect from the default checkout
 ├── controllers/
-│ └── IndexController.php → Endpoints AJAX (login, cadastro, cupom, frete, finalização)
+│ └── IndexController.php → AJAX endpoints (login, registration, coupon, shipping, order placement)
 ├── etc/
-│ ├── config.xml → Configuração do módulo
-│ ├── system.xml → Campos de configuração no Admin
+│ ├── config.xml → Module configuration
+│ ├── system.xml → Admin configuration fields
 │ └── adminhtml.xml
 └── sql/ultradev_checkout_setup/
-└── install-1.0.0.php → Instala atributos customizados de cliente (CNPJ, tipo de pessoa, etc.)
+└── install-1.0.0.php → Installs custom customer attributes (CNPJ, person type, etc.)
 
 app/design/frontend/
 ├── base/default/
 │ ├── layout/ultradev_checkout.xml
 │ └── template/ultradev/checkout/
-│ ├── checkout.phtml → Template principal do checkout
+│ ├── checkout.phtml → Main checkout template
 │ ├── root.phtml / root_success.phtml
-│ ├── success.phtml → Página de sucesso
+│ ├── success.phtml → Success page
 │ └── payment-icons.phtml
 └── ultimo/default/
-└── layout/ultradev_checkout.xml → Override necessário para o tema Ultimo
+└── layout/ultradev_checkout.xml → Required override for the Ultimo theme
 
 skin/frontend/base/default/
 ├── css/ultradev/
 │ ├── ultradev-checkout.css
 │ └── success.css
 └── js/ultradev/
-└── ultradev-checkout.js → Lógica do checkout: formulário, AJAX, validações, cupom
+└── ultradev-checkout.js → Checkout logic: form handling, AJAX, validation, coupons
 
 app/locale/pt_BR/
 └── UltraDev_Checkout_Customer.csv
 
-> 💡 **Nota sobre temas**: o Magento resolve layout e template de forma independente através do sistema de fallback (`tema atual` → `base/default`). O layout do tema **Ultimo** (`app/design/frontend/ultimo/default/layout/ultradev_checkout.xml`) é um arquivo físico separado do pacote `base/default` e precisa existir para que a página de sucesso (`ultradev_checkout_index_success`) seja renderizada corretamente nesse tema. Ao portar o módulo para outro tema, verifique se um layout equivalente precisa ser criado.
+> 💡 **Note on themes**: Magento resolves layout and template independently through its fallback system (`current theme` → `base/default`). The **Ultimo** theme layout (`app/design/frontend/ultimo/default/layout/ultradev_checkout.xml`) is a separate physical file from the `base/default` package and must exist for the success page (`ultradev_checkout_index_success`) to render correctly in that theme. When porting the module to another theme, check whether an equivalent layout override needs to be created.
 
 ---
 
-## 🔑 Rotas principais
+## 🔑 Main routes
 
-| Rota | Descrição |
+| Route | Description |
 |---|---|
-| `ultra-checkout/index/index` | Página principal do checkout |
-| `ultra-checkout/index/success` | Página de sucesso pós-pedido |
-| `ultra-checkout/index/placeOrder` | Endpoint AJAX de finalização do pedido |
-| `ultra-checkout/index/login` | Endpoint AJAX de autenticação |
-| `ultra-checkout/index/coupon` | Endpoint AJAX de aplicação/remoção de cupom |
+| `ultra-checkout/index/index` | Main checkout page |
+| `ultra-checkout/index/success` | Post-order success page |
+| `ultra-checkout/index/placeOrder` | AJAX endpoint for order placement |
+| `ultra-checkout/index/login` | AJAX authentication endpoint |
+| `ultra-checkout/index/coupon` | AJAX coupon apply/remove endpoint |
 
 ---
 
-## 📄 Licença
+## 📄 License
 
 MIT © [UltraDev](https://ultradev.com.br)
 
 ---
 
-## 👤 Autor
+## 👤 Author
 
 **UltraDev**
 📧 contato@ultradev.com.br
