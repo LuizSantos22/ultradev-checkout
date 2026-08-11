@@ -5,7 +5,6 @@
             <version>1.0.0</version>
         </UltraDev_Checkout>
     </modules>
-
     <global>
         <helpers>
             <ultradev_checkout>
@@ -17,11 +16,19 @@
                 <class>UltraDev_Checkout_Block</class>
             </ultradev_checkout>
         </blocks>
-        <models>
+       <models>
             <ultradev_checkout>
                 <class>UltraDev_Checkout_Model</class>
             </ultradev_checkout>
         </models>
+        <resources>
+            <ultradev_checkout_setup>
+                <setup>
+                    <module>UltraDev_Checkout</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
+                </setup>
+            </ultradev_checkout_setup>
+        </resources>
         <events>
             <controller_action_predispatch_checkout_onepage_index>
                 <observers>
@@ -34,14 +41,13 @@
             </controller_action_predispatch_checkout_onepage_index>
         </events>
     </global>
-
     <frontend>
         <routers>
             <ultradev_checkout>
                 <use>standard</use>
                 <args>
                     <module>UltraDev_Checkout</module>
-                    <frontName>ultradev-checkout</frontName>
+                    <frontName>ultra-checkout</frontName>
                 </args>
             </ultradev_checkout>
         </routers>
@@ -59,10 +65,9 @@
                         <default>UltraDev_Checkout.csv</default>
                     </files>
                 </UltraDev_Checkout>
-            </translate>
+            </modules>
         </translate>
     </frontend>
-
     <default>
         <ultradev_checkout>
             <general>
