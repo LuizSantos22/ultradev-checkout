@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <ultradev_checkout_index_index>
+        <block type="ultradev_checkout/checkout" name="root" template="ultradev/checkout/root.phtml" output="toHtml">
+            <block type="ultradev_checkout/checkout" name="ultradev.checkout" template="ultradev/checkout/checkout.phtml" />
+        </block>
+    </ultradev_checkout_index_index>
+    <ultradev_checkout_index_success>
+        <label>Ultra Checkout — Página de Sucesso</label>
+        <update handle="page_one_column" />
+        <reference name="content">
+            <block type="core/template" name="ultradev.checkout.success"
+                   template="ultradev/checkout/success.phtml" />
+        </reference>
+    </ultradev_checkout_index_success>
+
+</layout>
