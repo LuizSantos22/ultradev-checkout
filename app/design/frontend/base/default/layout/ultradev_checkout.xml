@@ -15,4 +15,30 @@
 
         </block>
     </ultradev_checkout_index_index>
+
+    <ultradev_checkout_success_v2>
+        <label>Ultra Checkout — Página de Sucesso V2</label>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="checkout.success">
+            <action method="setTemplate">
+                <template>ultradev/checkout/success_wrapper.phtml</template>
+            </action>
+            <block type="ultradev_checkout/success_details" name="ultradev.checkout.success.details"
+                   template="ultradev/checkout/success_v2.phtml" />
+        </reference>
+    </ultradev_checkout_success_v2>
+
+    <ultradev_checkout_index_success>
+        <label>Ultra Checkout — Página de Sucesso</label>
+        <update handle="page_one_column" />
+        <reference name="content">
+            <block type="core/template" name="ultradev.checkout.success"
+                   template="ultradev/checkout/success.phtml" />
+        </reference>
+    </ultradev_checkout_index_success>
+
 </layout>
