@@ -1,0 +1,77 @@
+<?php
+/**
+ * Mapa de ícones SVG por código de método de pagamento.
+ * Para adicionar um novo método, basta incluir o código => SVG aqui.
+ */
+$paymentIcons = [
+
+    // ── CARTÃO DE CRÉDITO ──────────────────────────────────────────────
+    'default_cc'              => 'credit_card',
+    'ccsave'                  => 'credit_card',
+    'authorizenet'            => 'credit_card',
+    'pagseguro_cc'            => 'credit_card',
+    'moip_cc'                 => 'credit_card',
+    'yapay_creditcardpayment' => 'credit_card',
+
+    // ── BOLETO ────────────────────────────────────────────────────────
+    'boleto'                  => 'boleto',
+    'moip_boleto'             => 'boleto',
+    'foxsea_paghiper'         => 'boleto',
+    'yapay_bankslip'          => 'boleto',
+    'pagseguro_boleto'        => 'boleto',
+
+    // ── PIX ───────────────────────────────────────────────────────────
+    'pix'                     => 'pix',
+    'yapay_pix'               => 'pix',
+    'pagseguro_pix'           => 'pix',
+    'mercadopago_pix'         => 'pix',
+
+    // ── MERCADO PAGO ──────────────────────────────────────────────────
+    'mercadopago_standard'    => 'mercadopago',
+    'mercadopago_basic'       => 'mercadopago',
+    'mercadopago_custom'      => 'mercadopago',
+
+    // ── PAYPAL ────────────────────────────────────────────────────────
+    'paypal_billing_agreement' => 'paypal',
+    'paypal_express'           => 'paypal',
+    'paypal_standard'          => 'paypal',
+
+    // ── TRANSFERÊNCIA / DÉBITO ────────────────────────────────────────
+    'moip_tef'                => 'transfer',
+
+    // ── CHEQUE / OUTROS ───────────────────────────────────────────────
+    'checkmo'  => 'credit_card',
+    'banktransfer' => 'transfer',
+    'cashondelivery' => 'wallet',
+    // ── FREE / SALDO ──────────────────────────────────────────────────
+    'free'                    => 'wallet',
+];
+
+$svgIcons = [
+
+    'credit_card' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 10h20" stroke="currentColor" stroke-width="1.5"/><path d="M6 15h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+
+    'boleto' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="20" height="18" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7v10M7 7v10M10 7v10M13 7v10M16 7v10M19 7v10M11 7v10M14 7v10" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>',
+
+    'pix' => '<svg width="22" height="22" viewBox="0 0 512 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M376.5 136.5c-24.7 0-47.9 9.6-65.4 27L263 211.6c-3.8 3.8-8.8 5.9-14.1 5.9s-10.3-2.1-14.1-5.9l-48-48.2C169 145.9 145.8 136 121 136c-24.7 0-47.9 9.6-65.4 27L8 210.7v90.6l47.6 47.6C73.1 366.4 96.3 376 121 376c24.7 0 47.9-9.6 65.4-27l48-48.2c7.7-7.7 21.1-7.7 28.2 0l48.1 48.2c17.5 17.4 40.7 27 65.4 27 24.7 0 47.9-9.6 65.4-27L488 301.4v-90.6l-47.1-47.1c-17.5-17.4-40.7-27.2-64.4-27.2zM159.4 320.6c-10.3 10.2-23.8 15.4-38.4 15.4-14.5 0-28.1-5.6-38.4-15.4L48 286v-60l34.6-34.6C92.9 181 106.5 176 121 176c14.5 0 28.1 5.6 38.4 15.4l48 48.2c9.3 9.3 21.8 14.7 34.7 15.3l-49 65.7h.3zm231.2 0c-10.3 10.2-23.8 15.4-38.4 15.4-14.5 0-28.1-5.6-38.4-15.4l-48.1-48.2c-9.1-9.1-21.2-14.4-33.9-15.2l49.3-66.1h-.3l33.3-33.5C325 148 338.5 142 353 142s28.1 5.6 38.4 15.4L426 192v59.6l-35.4 29z"/></svg>',
+
+    'mercadopago' => '<svg width="22" height="22" viewBox="0 0 32 22" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 0C7.163 0 0 4.925 0 11s7.163 11 16 11 16-4.925 16-11S24.837 0 16 0zm0 19c-7.18 0-13-3.589-13-8s5.82-8 13-8 13 3.589 13 8-5.82 8-13 8z"/><path d="M22.5 9.5c-1.2-1-4-3.3-4.8-3.9-.5-.4-.9-.6-1.2-.6s-.7.1-1 .2c-.4.1-.9.5-1.4.9-.5.4-.9.7-1.3.8-.4.1-.7 0-.8-.1l1-1.1c.8-.8 1.6-1.5 3.3-1.6 1.1 0 2.2.5 2.3.5.9.4 1.9.7 3.1.7s2.3-.3 3.5-.8l-.4-.3c-1 .4-2 .6-2.9.6s-1.9-.2-2.9-.7c-.1 0-1.2-.6-2.4-.6-1.5 0-2.3.5-2.8 1l-.2.2c-.5 0-1 .1-1.4.3-.4.1-.7.2-1 .2-.1 0-.4 0-.4 0-.4 0-2.1-.4-3.5-1l-.4.3c1.5.6 3.3 1.1 3.8 1.1.2 0 .3 0 .5 0 .4 0 .7-.1 1.1-.2.2-.1.4-.1.7-.2l-.2.2-1 1.1c-.1.1-.3.3-.1.6.1.1.3.3 1.1.3.5 0 .9-.1 1.3-.2.4-.1.9-.4 1.3-.8.4-.3.9-.7 1.3-.8.1 0 .3-.1.4-.1.3 0 .5.1 1 .5.8.6 4.6 3.8 4.6 3.9.2.2.2.5.2.5-.1.2-.3.5-.8.5-.1 0-.4-.1-.4-.1l-1.7-1.5c-.1-.1-.2-.1-.2 0-.1.1 0 .2.1.3l1.5 1.5c.2.2.2.4.2.4-.1.2-.4.6-.9.6-.1 0-.4-.1-.4-.1l-1.1-1c-.1-.1-.2-.1-.2 0-.1.1 0 .2.1.2l1.1 1.2c0 0 .2.3 0 .5-.1.1-.3.2-.5.2-.1 0-.1 0-.2 0-.1 0-.2 0-.2-.1l-1.1-1c-.1-.1-.2-.1-.2 0-.1.1 0 .2.1.3l.9 1c0 .1-.1.2-.5.2-.3 0-.7-.2-.9-.3.1-.2.1-.4.1-.6 0-.7-.6-1.4-1.4-1.4.1-.4 0-.9-.7-1.3-.2-.1-.4-.1-.6-.1-.2 0-.3 0-.4.1-.2-.2-.5-.5-.7-.6-.1 0-.3-.1-.5-.1-.3 0-.5.1-.8.2-.3-.2-1.4-.9-4.5-1.6l-.7-.2-.1.5.7.2c3.1.7 4.1 1.4 4.3 1.5-.1.1-.1.3-.1.4 0 .6.6 1.2 1.4 1.1.1.5.4.8.9 1 .1.1.4.1.4.1.1 0 .2 0 .3 0 .1.2.3.5.7.7.1 0 .4.1.5.1.1 0 .2 0 .4-.1.3.4.8.8 1.3.8.4 0 .7-.1 1-.4.2.1.7.3 1.2.3.5-.1.7-.2.8-.4.1.1.2.1.4.1.3 0 .5-.1.8-.3.5-.3.6-.7.6-1 .1 0 .3 0 .3 0 .3 0 .5-.1.8-.2.5-.3.6-.7.6-1 0-.3-.1-.5-.2-.7.8-.3 2.6-1 4.8-1.5l-.1-.5c-1.8.5-3.8 1.2-5 1.6z"/></svg>',
+
+    'transfer' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4-4 4 4M7 4v16M21 16l-4 4-4-4M17 20V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+
+    'wallet' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.5"/><path d="M16 12a2 2 0 1 0 4 0 2 2 0 0 0-4 0z" stroke="currentColor" stroke-width="1.5"/></svg>',
+
+    'checkmo' => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash" viewBox="0 0 16 16">
+  <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+  <path d="M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2z"/>
+</svg>',
+
+     'paypal' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 6.059-8.993 6.059H9.39l-1.172 7.42h3.48c.524 0 .968-.382 1.05-.9l.867-5.497c.082-.518.526-.9 1.05-.9h.66c4.293 0 6.937-2.087 7.627-5.897.3-1.63.043-2.743-.73-3.998z"/></svg>',
+
+    'default' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+];
+
+function getPaymentIcon(string $code, array $paymentIcons, array $svgIcons): string {
+    $type = $paymentIcons[$code] ?? 'default';
+    return $svgIcons[$type] ?? $svgIcons['default'];
+}
