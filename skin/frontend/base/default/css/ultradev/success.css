@@ -1,7 +1,7 @@
 /* ============================================
    Success Page - UltraDev Checkout
    skin/frontend/base/default/css/ultradev/success.css
-   Redesenho "recibo" — alinhado ao mockup aprovado
+   Redesenho "recibo" — alinhado e aprovado
    ============================================ */
 
 .sv2, .sv2 *, .sv2 *::before, .sv2 *::after { box-sizing: border-box; }
@@ -168,6 +168,7 @@
 }
 .sv2-info-block .sv2-value { font-weight: 600; font-size: 15px; }
 .sv2-info-block .sv2-sub { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; margin-top: 2px; }
+
 
 /* status */
 .sv2-status-row { display: flex; align-items: flex-start; gap: 14px; }
