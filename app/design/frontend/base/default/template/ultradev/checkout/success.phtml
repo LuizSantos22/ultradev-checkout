@@ -104,6 +104,20 @@ if ($_shippingAddr && $_shippingDesc) {
 if ($_addrName) {
     $_addrLine = preg_replace('/^' . preg_quote($_addrName, '/') . '\s*,?\s*/u', '', $_addrLine, 1);
 }
+
+// Hook genérico: se algum módulo de pagamento (ex.: UltraDev_PagHiperPix) declarou
+// o bloco "ultradev.paghiperpix.inline" no layout, renderiza aqui, dentro do card.
+// Se o módulo não existir/estiver desativado, $_pixHtml fica vazio e nada muda.
+$_pixHtml = '';
+try {
+    $_pixBlock = $this->getLayout()->getBlock('ultradev.paghiperpix.inline');
+    if ($_pixBlock) {
+        $_pixHtml = trim($_pixBlock->toHtml());
+    }
+} catch (Exception $e) {
+    Mage::logException($e);
+    $_pixHtml = '';
+}
 ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -173,9 +187,12 @@ if ($_addrName) {
 
     <div class="sv2-section">
       <div class="sv2-info-grid">
-        <div class="sv2-info-block">
+         <div class="sv2-info-block">
           <span class="sv2-label-tag">Pagamento</span>
           <span class="sv2-value"><?php echo htmlspecialchars($_paymentValue) ?></span>
+          <?php if ($_pixHtml): ?>
+            <?php echo $_pixHtml ?>
+          <?php endif; ?>
         </div>
         <div class="sv2-info-block">
           <span class="sv2-label-tag"><?php echo htmlspecialchars($_freteLabel) ?></span>
